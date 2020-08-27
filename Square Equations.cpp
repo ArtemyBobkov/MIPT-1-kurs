@@ -9,10 +9,22 @@
 void Hello() {
 
     printf("## Bobkov Artemy - Square Equations \n");
-    printf("## v.1.5 \n");
+    printf("## v.1.6 \n");
     printf("## All rights are Bla Bla Bla\n");
 
 }
+
+//-----------------------------------------------------------------------------
+//! Finds sign of a number
+//!
+//! @param [in] a number (double)
+//!
+//! @return number sign
+//!
+//! @note Returns 0 if a == 0
+//! @note signum(x)*x == abs(x)
+//!
+//-----------------------------------------------------------------------------
 
 int signum(double a) {    //сигнум - знак числа
 
@@ -45,7 +57,7 @@ int signum(double a) {    //сигнум - знак числа
 //!
 //-----------------------------------------------------------------------------
 
-int LinearSols(double b, double c, double *x1) {
+int LinearSols(double b, double c, double* x1) {
 
     assert (x1 != NULL);
     assert (isfinite(b));
@@ -53,13 +65,9 @@ int LinearSols(double b, double c, double *x1) {
     assert (isfinite(*x1));
 
     if (signum(b) == 0) {    // проверяем на ноль числа b и c
-
             if (signum(c) == 0) {
-
                 return INF_SOLS;
-
             } else {    // c != 0, b = 0
-
                 return 0;
             }
 
@@ -86,7 +94,7 @@ int LinearSols(double b, double c, double *x1) {
 //!
 //-----------------------------------------------------------------------------
 
-int SquareSols(double a, double  b, double  c, double *x1, double *x2) {
+int SquareSols(double a, double  b, double  c, double* x1, double* x2) {
 
     assert (x1 != NULL);
     assert (x2 != NULL);
@@ -122,37 +130,37 @@ int SquareSols(double a, double  b, double  c, double *x1, double *x2) {
 
 }
 
+//-----------------------------------------------------------------------------
+//! Prints solutions of a square equation ax^2 + bx + c = 0
+//!
+//! @param [in] a a-coefficient
+//! @param [in] b b-coefficient
+//! @param [in] c c-coefficient
+//! @param [out] x1 First Solution
+//! @param [out] x2 Second Solution
+//!
+//! @return 0 if there is no errors, else 1
+//!
+//-----------------------------------------------------------------------------
 
-int main () {
-
-    Hello();
-
-    printf("Enter equation coefficients: \n");
-    double a = 0, b = 0, c = 0;
-
-    int read_good = scanf("%lg %lg %lg", &a, &b, &c);
-
-    assert (read_good == 3);
-
-    double x1 = 0, x2 = 0;
+int Sol_Out(double a, double b, double c, double x1, double x2) {
     int sol_nums = SquareSols(a, b, c, &x1, &x2);
-
     switch (sol_nums) {
         case        0:
                       printf("No solutions :( \n");
-                      break;
+                      return 0;
 
         case        1:
                       printf("x = %lg \n", x1);
-                      break;
+                      return 0;
 
         case        2:
                       printf("x1 = %lg, x2 = %lg \n", x1, x2);
-                      break;
+                      return 0;
 
         case INF_SOLS:
                       printf("Infinite number of solutions \n");
-                      break;
+                      return 0;
 
         default:
                       printf("ERROR main(): \n");
@@ -160,7 +168,28 @@ int main () {
                       return 1;
 
     }
+}
 
+
+int main () {
+
+    Hello();
+
+    printf("Enter equation coefficients: \n");
+    double a = 0, b = 0, c = 0;
+    int read_good = 0;
+    do {
+        fflush(stdin);
+        read_good = scanf("%lg %lg %lg", &a, &b, &c);
+        if (read_good != 3) {
+            printf("You've entered wrong coefficients. Please, repeat. \n");
+        }
+
+    }
+    while (read_good != 3);
+
+    double x1 = 0, x2 = 0;
+    Sol_Out(a, b, c, x1, x2);
     return 0;
 }
 
