@@ -1,62 +1,105 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <stdlib.h>
 
-bool IsFinite(double a) {
 
-    if (a == a) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
+#define ACCURACY pow(10, -8) // погрешность, при которой мы считаем число нулём
+
+void Hello() {
+
+    printf("## Bobkov Artemy - Square Equations \n");
+    printf("## v.1.5 \n");
+    printf("## All rights are Bla Bla Bla\n");
+
 }
 
-int signum(double a) {
+int signum(double a) {    //сигнум - знак числа
 
-    assert (IsFinite(a));
+    assert (isfinite(a));
 
-    if (a > 0) {
+    if (a > ACCURACY) {
         return 1;
     }
-    if (a < 0) {
+    if (a < -ACCURACY) {
         return -1;
     }
-    if (a > (-pow(10, -8)) && a < pow(10, -8)) {
+    if (a >= -ACCURACY && a <= ACCURACY) {
         return 0;
     }
 }
 
 #define INF_SOLS -1
 
-int SquareSols (double a, double  b, double  c, double *x1, double *x2) {
 
-    assert (IsFinite(a));
-    assert (IsFinite(b));
-    assert (IsFinite(c));
-    assert (IsFinite(*x1));
-    assert (IsFinite(*x2));
-    assert (x1 != x2);
+//-----------------------------------------------------------------------------
+//! Solves a linear equation bx + c = 0
+//!
+//! @param [in] b b-coefficient
+//! @param [in] c c-coefficient
+//! @param [out] x1 Pointer to the 1st solution
+//!
+//! @return Number of roots
+//!
+//! @note In case of infinite solutions, returns INF_SOLS
+//!
+//-----------------------------------------------------------------------------
 
-    if (a*signum(a) < pow(10, -8)) {
+int LinearSols(double b, double c, double *x1) {
 
-        if (b*signum(b) < pow(10, -8)) {
+    assert (x1 != NULL);
+    assert (isfinite(b));
+    assert (isfinite(c));
+    assert (isfinite(*x1));
 
-            if (c*signum(c) < pow(10, -8)) {
+    if (signum(b) == 0) {    // проверяем на ноль числа b и c
+
+            if (signum(c) == 0) {
 
                 return INF_SOLS;
 
-            } else {    // c != 0, a = b = 0
+            } else {    // c != 0, b = 0
 
                 return 0;
             }
 
-        } else {    // b != 0, a = 0
+        } else {    // b != 0
 
             *x1 = -c/b;
-            *x2 = *x1;
             return 1;
         }
+}
+
+
+//-----------------------------------------------------------------------------
+//! Solves a square equation ax^2 + bx + c = 0
+//!
+//! @param [in] a a-coefficient
+//! @param [in] b b-coefficient
+//! @param [in] c c-coefficient
+//! @param [out] x1 Pointer to the 1st solution
+//! @param [out] x2 Pointer to the 2nd solution
+//!
+//! @return Number of roots
+//!
+//! @note In case of infinite solutions, returns INF_SOLS
+//!
+//-----------------------------------------------------------------------------
+
+int SquareSols(double a, double  b, double  c, double *x1, double *x2) {
+
+    assert (x1 != NULL);
+    assert (x2 != NULL);
+    assert (isfinite(a));
+    assert (isfinite(b));
+    assert (isfinite(c));
+    assert (isfinite(*x1));
+    assert (isfinite(*x2));
+    assert (x1 != x2);
+
+    if (signum(a) < ACCURACY) {
+
+        return LinearSols(b, c, x1);
 
     } else {    // a != 0
 
@@ -80,19 +123,21 @@ int SquareSols (double a, double  b, double  c, double *x1, double *x2) {
 }
 
 
-main () {
+int main () {
 
-    printf("## Bobkov Artemy - Square Equations \n");
-    printf("## v.1.0 \n \n");
+    Hello();
 
     printf("Enter equation coefficients: \n");
     double a = 0, b = 0, c = 0;
-    scanf("%lg %lg %lg", &a, &b, &c);
+
+    int read_good = scanf("%lg %lg %lg", &a, &b, &c);
+
+    assert (read_good == 3);
 
     double x1 = 0, x2 = 0;
-    int eqs = SquareSols (a, b, c, &x1, &x2);
+    int sol_nums = SquareSols(a, b, c, &x1, &x2);
 
-    switch (eqs) {
+    switch (sol_nums) {
         case        0:
                       printf("No solutions :( \n");
                       break;
@@ -115,4 +160,9 @@ main () {
                       return 1;
 
     }
+
+    return 0;
 }
+
+
+
