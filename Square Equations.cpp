@@ -5,11 +5,12 @@
 
 #define ACCURACY pow(10, -8) // accuracy that we want during operations
 
-void Hello() {
+void Hello()
+    {
     printf("## Bobkov Artemy - Square Equations \n");
-    printf("## v.1.72 \n");
+    printf("## v.1.73 \n");
     printf("## All rights are Bla Bla Bla\n");
-}
+    }
 
 //-----------------------------------------------------------------------------
 //! Finds sign of a number
@@ -24,7 +25,7 @@ void Hello() {
 //-----------------------------------------------------------------------------
 
 int signum(double a)
-    {    //signum is a sigh of a number
+    {
     assert (isfinite(a));
 
     if (a > ACCURACY)
@@ -66,7 +67,7 @@ int LinearSols(double b, double c, double* x1)
     assert (isfinite(*x1));
 
     if (signum(b) == 0)
-        {    // if b == 0 & c == 0
+        {
 
         if (signum(c) == 0)
             {
@@ -77,11 +78,11 @@ int LinearSols(double b, double c, double* x1)
             {    // c != 0, b = 0
             return 0;
             }
-    }
+        }
 
     else
         {    // b != 0
-        *x1 = -c/b;
+        *x1 = -c / b;
         return 1;
         }
     }
@@ -283,7 +284,7 @@ main ()
     int read_good = 0;
 
     do
-        {
+    {
         fflush(stdin);
         read_good = scanf("%lg %lg %lg", &a, &b, &c);
 
@@ -291,8 +292,7 @@ main ()
             {
             printf("You've entered wrong coefficients. Please, repeat. \n");
             }
-        }
-    while (read_good != 3);
+    } while (read_good != 3);
 
     double x1 = 0, x2 = 0;
     Sol_Out(a, b, c, x1, x2);
